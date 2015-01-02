@@ -10,8 +10,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,7 +56,7 @@ public class ForecastFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
-            new fetchWeatherData().execute("http://api.openweathermap.org/data/2.5/forecast/daily?q=94043&mode=json&units=metric&cnt=7");
+            new fetchWeatherData().execute("http://api.openweathermap.org/data/2.5/forecast/daily?q=bangalore&mode=json&units=metric&cnt=14");
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -77,6 +79,15 @@ public class ForecastFragment extends Fragment {
         forecastAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item_forecast, weekForecast);
         ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
         listView.setAdapter(forecastAdapter);
+
+        //adding listener
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(getActivity(),"Weather Item " +i + " was clicked",Toast.LENGTH_SHORT).show();
+            }
+        });
+
         return rootView;
     }
 
@@ -141,7 +152,7 @@ public class ForecastFragment extends Fragment {
                     }
                 }
                 try {
-                    return getWeatherDataFromJson(forecastJsonStr, 7);
+                    return getWeatherDataFromJson(forecastJsonStr, 14);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
