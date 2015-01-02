@@ -1,5 +1,6 @@
 package com.nagesh.udacity.sunshine;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -84,7 +85,11 @@ public class ForecastFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getActivity(),"Weather Item " +i + " was clicked",Toast.LENGTH_SHORT).show();
+                String forecast = forecastAdapter.getItem(i);
+                //Toast.makeText(getActivity(),forecast,Toast.LENGTH_SHORT).show();
+                Intent detailActivity = new Intent(getActivity(),DetailActivity.class);
+                detailActivity.putExtra(Intent.EXTRA_TEXT,forecast);
+                startActivity(detailActivity);
             }
         });
 
