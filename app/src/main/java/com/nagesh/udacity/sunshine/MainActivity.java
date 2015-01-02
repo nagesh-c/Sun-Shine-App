@@ -1,7 +1,10 @@
 package com.nagesh.udacity.sunshine;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -60,7 +63,24 @@ public class MainActivity extends ActionBarActivity {
             startActivity(intent);
             return true;
         }
-
+        if(id == R.id.action_map){
+            openPreferredLocationInMap();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
+    }
+    private void openPreferredLocationInMap(){
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        String location = pref.getString("location","Bangalore");
+        Uri geoLocation = Uri.parse("geo:0,0?").buildUpon().appendQueryParameter("q",location).build();
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(geoLocation);
+        if(intent.resolveActivity(getPackageManager()) != null){
+            startActivity(intent);
+        }
+        else{
+            Log.e("map errror","couldnt call map");
+        }
     }
 }

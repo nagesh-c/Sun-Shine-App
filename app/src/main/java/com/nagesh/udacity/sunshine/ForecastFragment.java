@@ -160,7 +160,7 @@ public class ForecastFragment extends Fragment {
                     }
                 }
                 try {
-                    return getWeatherDataFromJson(forecastJsonStr, 14);
+                    return getWeatherDataFromJson(forecastJsonStr);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -181,9 +181,16 @@ public class ForecastFragment extends Fragment {
          */
         private String formatHighLows(double high, double low) {
             // For presentation, assume the user doesn't care about tenths of a degree.
+
+            SharedPreferences pref =  PreferenceManager.getDefaultSharedPreferences(getActivity());
+            String temperature = pref.getString("temperature","metric");
+
+            if(temperature.equals("imperial")){
+                high = (high * 1.8) + 32;
+                low = (low * 1.8) + 32;
+            }
             long roundedHigh = Math.round(high);
             long roundedLow = Math.round(low);
-
             String highLowStr = roundedHigh + "/" + roundedLow;
             return highLowStr;
         }
@@ -195,7 +202,7 @@ public class ForecastFragment extends Fragment {
          * Fortunately parsing is easy:  constructor takes the JSON string and converts it
          * into an Object hierarchy for us.
          */
-        private String[] getWeatherDataFromJson(String forecastJsonStr, int numDays)
+        private String[] getWeatherDataFromJson(String forecastJsonStr)
                 throws JSONException {
 
             // These are the names of the JSON objects that need to be extracted.
@@ -210,7 +217,7 @@ public class ForecastFragment extends Fragment {
             JSONObject forecastJson = new JSONObject(forecastJsonStr);
             JSONArray weatherArray = forecastJson.getJSONArray(OWM_LIST);
 
-            String[] resultStrs = new String[numDays];
+            String[] resultStrs = new String[14];
             for (int i = 0; i < weatherArray.length(); i++) {
                 // For now, using the format "Day, description, hi/low"
                 String day;
@@ -252,7 +259,7 @@ public class ForecastFragment extends Fragment {
                     forecastAdapter.add(dayForecastStr);
                 }
             } else {
-                Log.e("error", "forcastadapter null");
+                Log.e("error", "forecastAdapter null");
             }
         }
     }

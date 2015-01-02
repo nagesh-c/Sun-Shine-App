@@ -29,6 +29,7 @@ public class SettingsActivity extends PreferenceActivity
         // updated when the preference changes.
         // TODO: Add preferences
         bindPreferenceSummaryToValue((findPreference("location")));
+        bindPreferenceSummaryToValue(findPreference("temperature"));
     }
 
     /**
