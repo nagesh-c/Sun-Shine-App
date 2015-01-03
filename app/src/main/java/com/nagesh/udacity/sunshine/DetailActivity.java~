@@ -91,7 +91,8 @@ public class DetailActivity extends ActionBarActivity {
 
             MenuItem menuItem = menu.findItem(R.id.action_share);
 
-            ShareActionProvider shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+            ShareActionProvider shareActionProvider =
+                    (ShareActionProvider) menuItem.getActionProvider();
             if(shareActionProvider != null) {
                 shareActionProvider.setShareIntent(shareForeCastIntent());
             }
